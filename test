@@ -1,0 +1,171 @@
+{
+  "graph": {
+    "name": "top_flat",
+    "nodes": [
+      {
+        "id": "param",
+        "type": "ParameterNode",
+        "properties": {
+          "expr": "1"
+        }
+      },
+      {
+        "id": "cycle_h_param",
+        "type": "ParameterNode",
+        "properties": {
+          "expr": "1"
+        }
+      },
+      {
+        "id": "iter",
+        "type": "ApplicationNode",
+        "properties": {
+          "kind": "actor",
+          "ports": {
+            "output": [
+              {
+                "name": "out",
+                "expr": "3",
+                "annotation": "NONE"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "cycle_h_A",
+        "type": "ApplicationNode",
+        "properties": {
+          "kind": "actor",
+          "ports": {
+            "input": [
+              { "name": "param", "kind": "cfg_input" },
+              { "name": "in", "expr": "1", "annotation": "NONE" },
+              { "name": "in_d", "expr": "1", "annotation": "NONE" }
+            ],
+            "output": [
+              { "name": "out_d", "expr": "1", "annotation": "NONE" }
+            ]
+          }
+        }
+      },
+      {
+        "id": "cycle_h_in",
+        "type": "BroadcastNode",
+        "properties": {
+          "ports": {
+            "input": [
+              { "name": "in", "expr": "1", "annotation": "NONE" }
+            ],
+            "output": [
+              { "name": "if_in", "expr": "1", "annotation": "NONE" }
+            ]
+          }
+        }
+      },
+      {
+        "id": "cycle_h_in_d",
+        "type": "BroadcastNode",
+        "properties": {
+          "ports": {
+            "input": [
+              { "name": "in_d", "expr": "1", "annotation": "NONE" }
+            ],
+            "output": [
+              { "name": "if_in_d", "expr": "1", "annotation": "NONE" }
+            ]
+          }
+        }
+      },
+      {
+        "id": "cycle_h_out_d",
+        "type": "RoundBufferNode",
+        "properties": {
+          "ports": {
+            "input": [
+              { "name": "if_out_d", "expr": "1", "annotation": "NONE" }
+            ],
+            "output": [
+              { "name": "out_d", "expr": "1", "annotation": "NONE" }
+            ]
+          }
+        }
+      },
+      {
+        "id": "cycle_out_d__cycle_in_d",
+        "type": "DelayNode",
+        "properties": {
+          "expr": "1",
+          "level": "permanent",
+          "ports": {
+            "input": [
+              { "name": "in_d", "expr": "1", "annotation": "NONE" }
+            ],
+            "output": [
+              { "name": "out_d", "expr": "1", "annotation": "NONE" }
+            ]
+          }
+        }
+      }
+    ],
+    "edges": [
+      {
+        "source": "cycle_h_out_d",
+        "source_port": "out_d",
+        "target": "cycle_h_in_d",
+        "target_port": "in_d",
+        "type": "fifo",
+        "properties": {
+          "delay": "cycle_out_d__cycle_in_d",
+          "data_type": "int"
+        }
+      },
+      {
+        "source": "cycle_h_in",
+        "source_port": "if_in",
+        "target": "cycle_h_A",
+        "target_port": "in",
+        "type": "fifo",
+        "properties": {
+          "data_type": "int"
+        }
+      },
+      {
+        "source": "cycle_h_in_d",
+        "source_port": "if_in_d",
+        "target": "cycle_h_A",
+        "target_port": "in_d",
+        "type": "fifo",
+        "properties": {
+          "data_type": "int"
+        }
+      },
+      {
+        "source": "cycle_h_A",
+        "source_port": "out_d",
+        "target": "cycle_h_out_d",
+        "target_port": "if_out_d",
+        "type": "fifo",
+        "properties": {
+          "data_type": "int"
+        }
+      },
+      {
+        "source": "iter",
+        "source_port": "out",
+        "target": "cycle_h_in",
+        "target_port": "in",
+        "type": "fifo",
+        "properties": {
+          "data_type": "int"
+        }
+      },
+      {
+        "source": "cycle_h_param",
+        "target": "cycle_h_A",
+        "target_port": "param",
+        "type": "dependency"
+      }
+    ]
+  }
+}
