@@ -1,8 +1,15 @@
 {
-  "id": "top_flat_graph",
-  "category": "ExecutionGraph",
-  "name": "top_flat",
-  "description": "Converted PREESM graph to DALiuGE format",
+  "modelData": {
+    "name": "top_flat_graph",
+    "type": "ExecutionGraph",
+    "description": "Converted PREESM graph to DALiuGE format",
+    "graphAttributes": {
+      "id": "top_flat_graph",
+      "category": "ExecutionGraph",
+      "name": "top_flat",
+      "description": "Graph translated from PREESM format."
+    }
+  },
   "nodes": [
     {
       "id": "param",
